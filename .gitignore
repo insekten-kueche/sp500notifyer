@@ -12,3 +12,4 @@ config.ini
 pod.yaml
 
 .DS_Store
+.idea
