@@ -1,0 +1,43 @@
+name: Run SP500 Notifier
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Runs every day at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  run-notifier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create config.ini
+        run: |
+          cat <<EOF > config.ini
+          [reporting]
+          history_period = 1y
+          sma_windows = 100, 200
+          datapoints_for_graph = 45
+          
+          [main_symbol]
+          name = S&P 500
+          symbol = ^GSPC
+          
+          [aux_symbol:ndx]
+          name = NASDAQ 100
+          symbol = ^NDX
+          
+          [aux_symbol:gdaxi]
+          name = DAX
+          symbol = ^GDAXI
+          
+          [pushover]
+          user = ${{ secrets.PUSHOVER_USER }}
+          token = ${{ secrets.PUSHOVER_TOKEN }}
+          EOF
+
+      - name: Run SP500 Notifier Docker
+        run: |
+          docker run --rm -v "$PWD/config.ini:/config.ini:ro" ghcr.io/schaenzer/sp500notifyer:main --config /config.ini
