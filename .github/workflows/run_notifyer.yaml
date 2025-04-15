@@ -2,7 +2,7 @@ name: Run SP500 Notifier
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Runs every day at 06:00 UTC
+    - cron: '0 6 * * 1-5'  # Runs every week day at 06:00 UTC
   workflow_dispatch:
 
 jobs:
