@@ -10,10 +10,12 @@
 {% set main_symbol_distance_sma200 = symbols[0]["data"].iloc[-1]["Distance SMA200"] %}
 {% if main_symbol_distance_sma200 > 0.025 %}
 🟩 <b><font color="#4CAE2F">Buy</font></b>
-{% elif main_symbol_distance_sma200 > 0 %}
+{% elif main_symbol_distance_sma200 >= 0 %}
 🟨 <b><font color="#FFCC00">Buy</font></b>
-{% else %}
+{% elif main_symbol_distance_sma200 < -0.025 %}
 🟥 <b><font color="#FF0000">Sell</font></b>
+{% else %}
+🟧 <b><font color="#FFA500">Sell</font></b>
 {% endif %}
 
 {% for symbol in symbols %}
